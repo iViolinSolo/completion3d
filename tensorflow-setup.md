@@ -1,3 +1,11 @@
+<!--
+ * @Author: ViolinSolo
+ * @Date: 2022-02-26 17:44:36
+ * @LastEditTime: 2022-02-27 12:52:13
+ * @LastEditors: ViolinSolo
+ * @Description: 
+ * @FilePath: /GitHub/completion3d/tensorflow-setup.md
+-->
 Below are instructions on how to setup completion3d training in tensorflow.
 New networks can be added following the template in tensorflow/models/TopNet.py 
 and adding corresponding import statements in tensorflow/main.py and 
@@ -18,6 +26,95 @@ Instructions below assume CUDA 9.0 is installed in /usr/local/cuda
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ```
+
+#### How to install cuda9.0 with imcompatible Ubuntu 18.04 ?
+follow instructions on page:  
+https://github.com/akirademoss/cuda-9.0-installation-on-ubuntu-18.04
+
+#### encounter missing lib even though the nvcc --version is 9.0 and with correct cuda installation.
+check makefile, change the lib dependece path, the absolute path is wrong.
+https://github.com/charlesq34/pointnet2/issues/36#issuecomment-399909494
+
+
+#### gcc version imcompatible:
+#error -- unsupported GNU version! gcc versions later than 6 are not supported!
+https://github.com/ethereum-mining/ethminer/issues/731#issuecomment-382648052
+
+remember this tensorflow version need CUDA9.0 and gcc6 to complile cuda version ChamferDistance  
+So the just follow all instuctions on "https://github.com/akirademoss/cuda-9.0-installation-on-ubuntu-18.04"  
+
+### 1. install gcc 6 so as to compile cuda script:
+#### 1.1 remove default gcc 7 if you see the soft link /usr/bin/gcc refering to /usr/bin/gcc-7*:
+```
+$ sudo apt remove gcc   OR RUN CMD   sudo apt autoremove gcc
+```
+#### 1.2 install gcc 6: follow [link](https://stackoverflow.com/questions/65605972/cmake-unsupported-gnu-version-gcc-versions-later-than-8-are-not-supported):
+```
+$ sudo apt-get install gcc-6 g++-6 -y
+$ sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
+$ sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+$ sudo ln -s /usr/bin/gcc-6 /usr/bin/cc
+$ sudo ln -s /usr/bin/g++-6 /usr/bin/c++
+```
+#### 1.3 check gcc and g++ version:
+```
+$ g++ -v
+$ gcc -v
+```
+### 2. install cuda 9.0
+#### 2.1 download the cuda running file. (also can download it from official website, local running file.)
+```
+wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
+```
+#### 2.2 add mode and run:
+```
+chmod +x cuda_9.0.176_384.81_linux.run 
+sudo ./cuda_9.0.176_384.81_linux.run --override
+```
+#### 2.3 answer the questions:
+```
+You are attempting to install on an unsupported configuration. Do you wish to continue? y
+Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 384.81? n
+Install the CUDA 9.0 Toolkit? y
+Do you want to create soft link? y
+Do you want install cuda 9.0 examples? n
+```
+### 3. install cudnn 7
+```
+cd ~/Downloads
+tar -xzvf cudnn-9.0-linux-x64-v7.3.0.29.tgz
+
+sudo cp -P cuda/include/cudnn.h /usr/local/cuda-9.0/include
+sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda-9.0/lib64/
+sudo chmod a+r /usr/local/cuda-9.0/lib64/libcudnn*
+```
+### 4. setup environment PATH:
+```
+echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+### 5. verife the installation.
+#### 5.1 reboot the computer
+```
+sudo systemctl reboot
+
+OR
+
+sudo systemctl reboot -i
+```
+#### 5.2 check if the version is 9.0
+```
+nvidia-smi
+nvcc -V
+```
+### 6 link previous installed gcc 6
+```
+sudo apt install gcc-6 g++-6
+sudo ln -s /usr/bin/gcc-6 /usr/local/cuda/bin/gcc
+sudo ln -s /usr/bin/g++-6 /usr/local/cuda/bin/g++
+```
+
 
 ## Tensorflow Python Environment
 

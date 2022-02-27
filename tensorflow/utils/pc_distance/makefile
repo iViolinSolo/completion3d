@@ -1,4 +1,5 @@
 PYTHON_DIR=../../comp3d_tf_venv
+PYTHON_DIR=/home/xumh/miniconda3/envs/completion3d
 CUDA_DIR=/usr/local/cuda
 cuda_inc=$(CUDA_DIR)/include/
 cuda_lib=$(CUDA_DIR)/lib64/
