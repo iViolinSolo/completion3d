@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": 
+                "${workspaceFolder}/${env:PYTHONPATH}:${workspaceFolder}/shared:${workspaceFolder}/shared/datasets:${workspaceFolder}/tensorflow:${workspaceFolder}/tensorflow/utils:${workspaceFolder}/tensorflow/models"},
+            "args": [
+                "--epochs", "300", "--lr", "0.5e-2", "--batch_size", "32",
+                "--nworkers", "4", "--NET", "TopNet", "--dataset", "shapenet",
+                "--pc_augm_scale", "0", "--pc_augm_rot", "1", "--pc_augm_mirror_prob", "0.5",
+                "--eval", "0", "--optim", "adagrad", "--code_nfts", "1024",
+                "--resume", "0", "--npts", "2048", "--ENCODER_ID", "1", "--dist_fun", "chamfer",
+                "--save_nth_epoch", "5", "--test_nth_epoch", "5", 
+                "--benchmark", "0", "--NLEVELS", "6", "--NFEAT", "8",
+            ]
+        },
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+              "host": "10.131.6.84",
+              "port": 5678
+            }
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (simplest configuration)",
+            "program": "${file}"
+        }
+    ]
+}

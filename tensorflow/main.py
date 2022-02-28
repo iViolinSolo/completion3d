@@ -3,7 +3,10 @@
 import os
 import sys
 sys.path.append(os.getcwd())
+# print(sys.path)
+# print(os.getcwd())
 import _init_paths
+# print(sys.path)
 import json
 import math
 from parse_args import parse_args
