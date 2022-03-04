@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+###
+ # @Author: ViolinSolo
+ # @Date: 2022-02-28 15:16:50
+ # @LastEditTime: 2022-03-03 00:03:07
+ # @LastEditors: ViolinSolo
+ # @Description: change input npts with fixed 256 outputs.
+ # @FilePath: /GitHub/completion3d/pytorch/run.sh
+### 
 
 # Data Parameters
 DATASET='shapenet'
@@ -35,3 +43,4 @@ python -u $PROGRAM --epochs $EPOCHS --lr $LR --batch_size $BATCH_SIZE \
     --pc_augm_scale $SCALE --pc_augm_rot $ROT --pc_augm_mirror_prob $MIRROR \
     --eval $EVAL --optim $OPTIM --code_nfts $CODE_NFTS  --benchmark $BENCHMARK \
     --resume $RESUME --npts $NPTS  --dist_fun $DIST_FUN \
+    --inpts 256

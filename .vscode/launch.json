@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: TensorFlow",
             "type": "python",
             "request": "launch",
             "program": "${file}",
@@ -17,10 +17,32 @@
                 "--epochs", "300", "--lr", "0.5e-2", "--batch_size", "32",
                 "--nworkers", "4", "--NET", "TopNet", "--dataset", "shapenet",
                 "--pc_augm_scale", "0", "--pc_augm_rot", "1", "--pc_augm_mirror_prob", "0.5",
-                "--eval", "0", "--optim", "adagrad", "--code_nfts", "1024",
+                "--optim", "adagrad", "--code_nfts", "1024",
                 "--resume", "0", "--npts", "2048", "--ENCODER_ID", "1", "--dist_fun", "chamfer",
                 "--save_nth_epoch", "5", "--test_nth_epoch", "5", 
-                "--benchmark", "0", "--NLEVELS", "6", "--NFEAT", "8",
+                "--benchmark", "0", "--eval", "0", "--NLEVELS", "6", "--NFEAT", "8",
+                "--inpts", "256",
+            ]
+        },
+        {
+            "name": "Python: Pytorch",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "1",
+                "PYTHONPATH": "${workspaceFolder}/${env:PYTHONPATH}:${workspaceFolder}/shared:${workspaceFolder}/shared/datasets:${workspaceFolder}/pytorch:${workspaceFolder}/pytorch/utils:${workspaceFolder}/pytorch/models:${workspaceFolder}/pytorch/utils/emd:${workspaceFolder}/pytorch/utils/chamfer"
+            },
+            "args": [
+                "--epochs", "300", "--lr", "1e-2", "--batch_size", "32",
+                "--nworkers", "4", "--NET", "AtlasNet", "--dataset", "shapenet",
+                "--pc_augm_scale", "0", "--pc_augm_rot", "1", "--pc_augm_mirror_prob", "0.5",
+                "--optim", "adagrad", "--code_nfts", "1024",
+                "--resume", "0", "--npts", "2048", "--dist_fun", "chamfer",
+                // "--save_nth_epoch", "5", "--test_nth_epoch", "5", 
+                "--benchmark", "0", "--eval", "0", //"--NLEVELS", "6", "--NFEAT", "8",
+                "--inpts", "256",
             ]
         },
         {

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+###
+ # @Author: ViolinSolo
+ # @Date: 2022-02-28 15:16:50
+ # @LastEditTime: 2022-03-02 23:49:23
+ # @LastEditors: ViolinSolo
+ # @Description: change input npts with fixed 256 outputs.
+ # @FilePath: /GitHub/completion3d/tensorflow/run.sh
+### 
 
 # Data Parameters
 DATASET='shapenet'
@@ -39,4 +47,5 @@ python -u $PROGRAM --epochs $EPOCHS --lr $LR --batch_size $BATCH_SIZE \
     --eval $EVAL --optim $OPTIM --code_nfts $CODE_NFTS \
     --resume $RESUME --npts $NPTS --ENCODER_ID $ENCODER_ID --dist_fun $DIST_FUN \
     --save_nth_epoch $SAVE_EPOCH --test_nth_epoch $TEST_EPOCH \
-    --benchmark $BENCHMARK --NLEVELS $NLEVELS --NFEAT $NFEAT
+    --benchmark $BENCHMARK --NLEVELS $NLEVELS --NFEAT $NFEAT \
+    --inpts 256

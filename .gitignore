@@ -2,7 +2,7 @@
 results*
 data
 scripts
-
+.idea
 
 *build
 *.so
