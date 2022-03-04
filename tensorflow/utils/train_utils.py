@@ -275,7 +275,7 @@ def predict_all_results(split, args):  # TODO: Bug exist, this method is designe
     if Nb*args.batch_size < L:
         Nb += 1
 
-    pred_save_rpth = os.path.join(os.DATA_PATH, f'pred_{split}')
+    pred_save_rpth = os.path.join(args.DATA_PATH, f'pred_{split}')
     if not os.path.exists(pred_save_rpth):
         os.makedirs(pred_save_rpth)
 
@@ -310,7 +310,7 @@ def predict_all_results(split, args):  # TODO: Bug exist, this method is designe
             save_rpth = os.path.join(pred_save_rpth, objname)
             if not os.path.exists(save_rpth):
                 os.makedirs(save_rpth)
-            with open(os.path.join(save_rpth, xfname[1:3]+'.xyz')) as fw:  # save to json format.
+            with open(os.path.join(save_rpth, xfname[1:-3]+'.xyz'), 'w') as fw:  # save to json format.
                 fw.write(json.dumps(np.asarray(o_cpu)[0].tolist()))
 
     kill_data_processes(data_queue, data_processes)
