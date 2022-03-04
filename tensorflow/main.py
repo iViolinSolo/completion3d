@@ -15,7 +15,8 @@ from Folding import *
 from TopNet import *
 from train_utils import train, test, metrics, samples, set_seed, \
     tf_resume, cache_pred, model_at, parse_experiment, set_optim, \
-    check_overwrite, data_setup, get_available_gpus, benchmark_results
+    check_overwrite, data_setup, get_available_gpus, benchmark_results, \
+    predict_all_results
 from data_process import kill_data_processes
 
 def save_model(args, epoch):
@@ -111,11 +112,13 @@ def main():
     kill_data_processes(train_data_queue, train_data_processes)
 
     split = 'val'
-    predictions = samples(split, args, 20)
-    cache_pred(predictions, split, args)
-    metrics(split, args, epoch)
-    if args.benchmark:
-        benchmark_results('test', args)
+    # skip original sample and test version
+    # predictions = samples(split, args, 20)
+    # cache_pred(predictions, split, args)
+    # metrics(split, args, epoch)
+    # if args.benchmark:
+    #     benchmark_results('test', args)
+    predict_all_results(split, args)
 
 if __name__ == "__main__":
     main()
