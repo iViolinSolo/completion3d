@@ -13,7 +13,8 @@ from AtlasNet import *
 from PointNetFCAE import *
 from train_utils import train, test, metrics, samples, set_seed, \
     resume, cache_pred, create_optimizer, model_at, parse_experiment, \
-    check_overwrite, data_setup, benchmark_results
+    check_overwrite, data_setup, benchmark_results, \
+    predict_all_results
 from data_process import kill_data_processes
 from modules.emd import EMDModule
 
@@ -96,11 +97,13 @@ def main():
     kill_data_processes(train_data_queue, train_data_processes)
 
     split = 'val'
-    predictions = samples(split, args, 20)
-    cache_pred(predictions, split, args)
-    metrics(split, args, epoch)
-    if args.benchmark:
-        benchmark_results('test', args)
+    # predictions = samples(split, args, 20)
+    # cache_pred(predictions, split, args)
+    # metrics(split, args, epoch)
+    # if args.benchmark:
+    #     benchmark_results('test', args)
+    with torch.no_grad():
+        predict_all_results(split, args)
 
 if __name__ == "__main__":
     main()
