@@ -349,6 +349,77 @@ def predict_all_results(split, args):  # TODO: Bug exist, this method is designe
     pass
 
 
+'''
+just no limits version of fn:samples
+v2: add adaptions for test ds predicts
+'''
+def predict_all_results_v2(split, args):  # TODO: Bug exist, this method is designed to test using N samples, however, it generate result of N+1 predicts, the iteration conditions are wrong.
+    print("Predicting ...")
+    assert hasattr(args, 'classmap'), '[error] unknown error, args not initialized properly, no classmap attr in args.'
+    args.training=False
+
+    # collected = defaultdict(list)
+    # predictions = {}
+    class_samples = defaultdict(int)
+    if hasattr(args, 'classmap'):  # TODO: do not know whether it will need this fns.
+        for val in args.classmap:
+            class_samples[val[0]] = 0
+
+    data_queue, data_processes = data_setup(args, split, num_workers=1, repeat=False)
+    L = len(data_processes[0].data_paths)
+    Nb = int(L/args.batch_size)
+    if Nb*args.batch_size < L:
+        Nb += 1
+
+    pred_save_rpth = os.path.join(args.DATA_PATH, f'pred_{split}')
+    if not os.path.exists(pred_save_rpth):
+        os.makedirs(pred_save_rpth)
+
+    # iterate over dataset in batches
+    for bidx in tqdm(range(Nb)): 
+        # clear results each batch began
+        collected = defaultdict(list)
+        # predictions = {}
+
+        targets, clouds_data = data_queue.get()
+
+        # predicts.
+        loss, dist1, dist2, emd_cost, outputs = args.step(args, targets, clouds_data)
+        for idx in range(targets.shape[0]):  # iter in batch_size dim.
+            # if hasattr(args, 'classmap'):
+            fname = clouds_data[0][idx][:clouds_data[0][idx].rfind('.')]
+            synset = fname.split('/')[-2]
+            class_samples[synset] += 1  # default value is 0 if key not exist.
+            
+            collected[fname].append((outputs[idx:idx+1,...], targets[idx:idx+1,...],
+                                    clouds_data[1][idx:idx+1,...]))
+            
+        for fname, lst in collected.items():
+            o_cpu, t_cpu, inp= list(zip(*lst))
+            o_cpu = o_cpu[0]
+            t_cpu, inp = t_cpu[0], inp[0]
+            # predictions[fname] = (inp, o_cpu, t_cpu)
+
+            synset = fname.split('/')[-2]  # fname:'00000001/Object_2x_feiyate_pc_1015.h5' | synset: '00000001'
+            # xfname = f'_pc_{fname.split("_")[-1]}'  # fname:'00000001/Object_2x_feiyate_pc_1015.h5' | xfname: '_pc_1015.h5'
+            # objname = fname[:-len(xfname)]  # objname: '00000001/Object_2x_feiyate'
+            # save_rpth = os.path.join(pred_save_rpth, objname)
+            save_rpth = os.path.join(pred_save_rpth, synset)
+            if not os.path.exists(save_rpth):
+                os.makedirs(save_rpth)
+            # # with open(os.path.join(save_rpth, xfname[1:-3]+'.xyz'), 'w') as fw:  # save to json format.
+            # #     fw.write(json.dumps(np.asarray(o_cpu)[0].tolist()))
+            # with open(os.path.join(pred_save_rpth, fname[:-3]+'.txt'), 'w') as fw:  # save to json format.
+            #     fw.write(json.dumps(np.asarray(o_cpu)[0].tolist()))
+
+            np.savetxt(os.path.join(pred_save_rpth, fname[:-3]+'.txt'), np.asarray(o_cpu)[0])
+
+    kill_data_processes(data_queue, data_processes)
+
+    # return predictions
+    pass
+
+
 def batch_instance_metrics(args, dist1, dist2):
     dgen = np.mean(dist1, 1) + np.mean(dist2, 1)
     return dgen

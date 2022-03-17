@@ -1,3 +1,11 @@
+'''
+Author: ViolinSolo
+Date: 2022-02-28 15:16:50
+LastEditTime: 2022-03-17 23:59:33
+LastEditors: ViolinSolo
+Description: 
+FilePath: /completion3d/shared/datasets/shapenet.py
+'''
 # --------------------------------------------------------
 # Copyright (c) 2019
 # --------------------------------------------------------
@@ -39,6 +47,7 @@ class ShapenetDataProcess(DataProcess):
         partial = load_h5(fname)
         if self.split == 'test':
             gtpts = partial
+            gtpts = pad_cloudN(gtpts, 2048)  # TODO: manually add gt to 2048 dim, so that test will match right result.(2048 can calc default metric)
         else:
             gtpts = load_h5(fname.replace('partial', 'gt'))
         if train:

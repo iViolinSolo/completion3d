@@ -16,7 +16,7 @@ from TopNet import *
 from train_utils import train, test, metrics, samples, set_seed, \
     tf_resume, cache_pred, model_at, parse_experiment, set_optim, \
     check_overwrite, data_setup, get_available_gpus, benchmark_results, \
-    predict_all_results
+    predict_all_results, predict_all_results_v2
 from data_process import kill_data_processes
 
 def save_model(args, epoch):
@@ -119,6 +119,8 @@ def main():
     # if args.benchmark:
     #     benchmark_results('test', args)
     predict_all_results(split, args)
+    split = 'test'
+    predict_all_results_v2(split, args)
 
 if __name__ == "__main__":
     main()
